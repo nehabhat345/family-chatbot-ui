@@ -4,6 +4,7 @@ import './App.css';
 const App = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -12,7 +13,7 @@ const App = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, loading]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -20,6 +21,7 @@ const App = () => {
     const userMessage = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
+    setLoading(true);
 
     try {
       const response = await fetch('https://family-chatbot.fly.dev/api/chatbot/message', {
@@ -29,10 +31,15 @@ const App = () => {
       });
       const data = await response.json();
       const botMessage = { role: 'bot', content: data.response };
-      setTimeout(() => setMessages(prev => [...prev, botMessage]), 700);
+      setTimeout(() => {
+        setMessages(prev => [...prev, botMessage]);
+        setLoading(false);
+      }, 700);
     } catch {
-      setTimeout(() =>
-        setMessages(prev => [...prev, { role: 'bot', content: 'Oops! Something went wrong.' }]), 700);
+      setTimeout(() => {
+        setMessages(prev => [...prev, { role: 'bot', content: 'Oops! Something went wrong.' }]);
+        setLoading(false);
+      }, 700);
     }
   };
 
@@ -59,6 +66,14 @@ const App = () => {
             {msg.content}
           </div>
         ))}
+
+        {loading && (
+          <div className="message bot loading">
+            <span className="spinner" aria-label="Loading"></span>
+            Mixing the best ideas for you... आपके लिए बेहतरीन विचार मिला रहे हैं।
+          </div>
+        )}
+
         <div ref={messagesEndRef} />
       </div>
 
