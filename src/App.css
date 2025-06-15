@@ -1,9 +1,13 @@
-/* Subtle warm gradient background */
+/* Background image with subtle warm gradient overlay */
 body, html {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: linear-gradient(135deg, #fff8f0 0%, #f0e6d2 100%);
+  background: url('/gharkiBaat.png') no-repeat center center fixed;
+  /* background:
+    linear-gradient(135deg, rgba(255, 248, 240, 0.8), rgba(240, 230, 210, 0.8)),
+    url('./gharkibaat.png') no-repeat center center fixed; */
+  background-size: cover;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #4a3c1a;
 }
