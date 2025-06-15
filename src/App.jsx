@@ -32,8 +32,7 @@ const App = () => {
       setTimeout(() => setMessages(prev => [...prev, botMessage]), 700);
     } catch {
       setTimeout(() =>
-        setMessages(prev => [...prev, { role: 'bot', content: 'Oops! Something went wrong.' }]),
-      700);
+        setMessages(prev => [...prev, { role: 'bot', content: 'Oops! Something went wrong.' }]), 700);
     }
   };
 
@@ -43,6 +42,13 @@ const App = () => {
 
   return (
     <div className="app">
+      <header className="header">
+        <h1 className="title">Ghar Ki Baat</h1>
+        <div className="tagline">
+          Recipes, Rituals aur Rishtey — Ghar ke har pehlu ki baat. ❤️
+        </div>
+      </header>
+
       <div className="chatbox" role="log" aria-live="polite" aria-relevant="additions">
         {messages.map((msg, idx) => (
           <div
@@ -60,7 +66,7 @@ const App = () => {
         <input
           type="text"
           aria-label="Type your message"
-          placeholder="Ask your family recipe..."
+          placeholder="Ask anything about food or festivals..."
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyPress={handleKeyPress}

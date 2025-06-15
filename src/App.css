@@ -11,22 +11,68 @@ body, html, #root {
   background-color: #fff8f0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
 }
 
 .app {
+  position: relative;
   max-width: 600px;
   height: 100vh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  background: url('/background.png') no-repeat center center fixed;
+  background: url('/gharkiBaat.png') no-repeat center center fixed;
   background-size: cover;
   box-shadow: 0 0 25px rgba(0,0,0,0.25);
   border-radius: 12px;
   overflow: hidden;
-  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+  z-index: 1;
 }
 
+/* Ambient glowing overlay on top of background image */
+.app::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(255, 236, 179, 0.2), transparent 70%);
+  pointer-events: none;
+  animation: warmGlow 6s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes warmGlow {
+  from {
+    background: radial-gradient(circle at top left, rgba(255, 236, 179, 0.15), transparent 70%);
+  }
+  to {
+    background: radial-gradient(circle at bottom right, rgba(255, 204, 128, 0.25), transparent 70%);
+  }
+}
+
+/* Header Title + Tagline */
+.header {
+  text-align: center;
+  padding: 24px 16px 8px;
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 2px solid #f1d9a3;
+  z-index: 2;
+}
+
+.title {
+  font-size: 2.2rem;
+  color: #6b4c00;
+  margin: 0;
+  font-weight: bold;
+}
+
+.tagline {
+  font-size: 1.1rem;
+  color: #a66b00;
+  font-style: italic;
+  margin: 4px 0 0;
+}
+
+/* Chatbox */
 .chatbox {
   flex: 1;
   overflow-y: auto;
@@ -36,6 +82,8 @@ body, html, #root {
   border-radius: 12px 12px 0 0;
   scrollbar-width: thin;
   scrollbar-color: #fbb72a #fbeed4;
+  position: relative;
+  z-index: 1;
 }
 
 .chatbox::-webkit-scrollbar {
@@ -53,6 +101,7 @@ body, html, #root {
   border: 2px solid #fbeed4;
 }
 
+/* Message bubbles */
 .message {
   max-width: 75%;
   margin-bottom: 14px;
@@ -81,12 +130,15 @@ body, html, #root {
   box-shadow: 3px 3px 10px rgba(255, 204, 102, 0.75);
 }
 
+/* Input area */
 .input-area {
   display: flex;
   padding: 15px 18px;
   background: rgba(255, 250, 240, 0.95);
   border-top: 1px solid #f1d9a3;
   border-radius: 0 0 12px 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .input-area input {
@@ -163,6 +215,14 @@ body, html, #root {
     font-size: 1rem;
     padding: 12px 18px;
   }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .tagline {
+    font-size: 1rem;
+  }
 }
 
 /* Responsive for small phones */
@@ -181,5 +241,13 @@ body, html, #root {
   .input-area button {
     font-size: 0.95rem;
     padding: 10px 16px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .tagline {
+    font-size: 0.95rem;
   }
 }
