@@ -47,6 +47,11 @@ const App = () => {
     if (e.key === 'Enter') sendMessage();
   };
 
+  const clearChat = () => {
+    setMessages([]);
+    setInput('');
+  };
+
   return (
     <div className="app">
       <header className="header">
@@ -70,7 +75,7 @@ const App = () => {
         {loading && (
           <div className="message bot loading">
             <span className="spinner" aria-label="Loading"></span>
-            Mixing the best ideas for you... आपके लिए बेहतरीन विचार मिला रहे हैं।
+            Bringing mummy's best ideas for you... आपके लिए मम्मी के बेहतरीन विचार ला रहे हैं।
           </div>
         )}
 
@@ -89,6 +94,14 @@ const App = () => {
           spellCheck="false"
         />
         <button aria-label="Send message" onClick={sendMessage}>Send</button>
+        <button
+          className="clear-chat-button"
+          onClick={clearChat}
+          title="Clear Chat"
+          aria-label="Clear Chat"
+        >
+          🧹
+        </button>
       </div>
     </div>
   );
