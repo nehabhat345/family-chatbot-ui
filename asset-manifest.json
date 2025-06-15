@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/family-chatbot-ui/static/css/main.3ccdd7b2.css",
+    "main.js": "/family-chatbot-ui/static/js/main.5b708972.js",
+    "static/media/background.png": "/family-chatbot-ui/static/media/background.89a20178fa948018524d.png",
+    "index.html": "/family-chatbot-ui/index.html",
+    "main.3ccdd7b2.css.map": "/family-chatbot-ui/static/css/main.3ccdd7b2.css.map",
+    "main.5b708972.js.map": "/family-chatbot-ui/static/js/main.5b708972.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3ccdd7b2.css",
+    "static/js/main.5b708972.js"
+  ]
+}
