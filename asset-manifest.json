@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/family-chatbot-ui/static/css/main.1db9e2af.css",
-    "main.js": "/family-chatbot-ui/static/js/main.8f25c494.js",
+    "main.js": "/family-chatbot-ui/static/js/main.73b75e2a.js",
     "static/media/gharkiBaat.png": "/family-chatbot-ui/static/media/gharkiBaat.d574ad0742c90551a64a.png",
     "index.html": "/family-chatbot-ui/index.html",
     "main.1db9e2af.css.map": "/family-chatbot-ui/static/css/main.1db9e2af.css.map",
-    "main.8f25c494.js.map": "/family-chatbot-ui/static/js/main.8f25c494.js.map"
+    "main.73b75e2a.js.map": "/family-chatbot-ui/static/js/main.73b75e2a.js.map"
   },
   "entrypoints": [
     "static/css/main.1db9e2af.css",
-    "static/js/main.8f25c494.js"
+    "static/js/main.73b75e2a.js"
   ]
 }
