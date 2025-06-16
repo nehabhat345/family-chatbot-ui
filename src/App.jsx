@@ -24,7 +24,8 @@ const App = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('https://family-chatbot.fly.dev/api/chatbot/message', {
+      // const response = await fetch('https://family-chatbot.fly.dev/api/chatbot/message', {
+      const response = await fetch('https://family-chatbot.onrender.com/api/chatbot/message',{
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: input }),
