@@ -5,6 +5,7 @@ const App = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [lastSuggestedKeyword, setLastSuggestedKeyword] = useState(null);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -15,23 +16,25 @@ const App = () => {
     scrollToBottom();
   }, [messages, loading]);
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+  const sendMessage = async (customMessage = null) => {
+    const messageToSend = customMessage || input.trim();
+    if (!messageToSend) return;
 
-    const userMessage = { role: 'user', content: input };
+    const userMessage = { role: 'user', content: messageToSend };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setLoading(true);
 
     try {
-      // const response = await fetch('https://family-chatbot.fly.dev/api/chatbot/message', {
-      const response = await fetch('https://family-chatbot.onrender.com/api/chatbot/message',{
+      const response = await fetch('https://family-chatbot.onrender.com/api/chatbot/message', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({ message: messageToSend }),
       });
       const data = await response.json();
       const botMessage = { role: 'bot', content: data.response };
+      setLastSuggestedKeyword(data.suggested_keyword || null);
+
       setTimeout(() => {
         setMessages(prev => [...prev, botMessage]);
         setLoading(false);
@@ -45,12 +48,23 @@ const App = () => {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') sendMessage();
+    if (e.key === 'Enter') handleUserInput();
+  };
+
+  const handleUserInput = () => {
+    const trimmedInput = input.trim().toLowerCase();
+    if (lastSuggestedKeyword && ['yes', 'haan', 'haanji', 'ha'].includes(trimmedInput)) {
+      sendMessage(lastSuggestedKeyword);
+      setLastSuggestedKeyword(null);
+    } else {
+      sendMessage();
+    }
   };
 
   const clearChat = () => {
     setMessages([]);
     setInput('');
+    setLastSuggestedKeyword(null);
   };
 
   return (
@@ -94,7 +108,7 @@ const App = () => {
           autoComplete="off"
           spellCheck="false"
         />
-        <button aria-label="Send message" onClick={sendMessage}>Send</button>
+        <button aria-label="Send message" onClick={handleUserInput}>Send</button>
         <button
           className="clear-chat-button"
           onClick={clearChat}
