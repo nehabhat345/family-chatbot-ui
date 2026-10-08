@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
+import './FormattedMessage.css';
 
 const aliases = {
   "karwa chauth": "karwa_chauth",
@@ -95,6 +96,55 @@ const getFamilyMessages = (key) => {
   };
 };
 
+const renderBotMessage = (content) => {
+  if (typeof content !== 'string') return content ?? '';
+
+  const blocks = [];
+  let listType = null;
+  let listItems = [];
+  const flushList = () => {
+    if (!listItems.length) return;
+    const List = listType === 'numbered' ? 'ol' : 'ul';
+    blocks.push(
+      <List key={`list-${blocks.length}`}>
+        {listItems.map((item, index) => <li key={index}>{item}</li>)}
+      </List>
+    );
+    listItems = [];
+    listType = null;
+  };
+
+  content.split(/\r?\n/).forEach((line) => {
+    const trimmedLine = line.trim();
+    if (!trimmedLine) {
+      flushList();
+      return;
+    }
+
+    const listMatch = trimmedLine.match(/^(?:[-*]\s+|\d+[.)]\s+)/);
+    if (listMatch) {
+      const nextListType = /^\d/.test(trimmedLine) ? 'numbered' : 'bulleted';
+      if (listType && listType !== nextListType) flushList();
+      listType = nextListType;
+      listItems.push(trimmedLine.slice(listMatch[0].length));
+      return;
+    }
+
+    flushList();
+    const titleMatch = trimmedLine.match(/^\*\*(.+)\*\*$/);
+    if (titleMatch) {
+      blocks.push(<h3 key={`title-${blocks.length}`}>{titleMatch[1]}</h3>);
+    } else if (/^(Ingredients|Method|Details|Tip):$/i.test(trimmedLine)) {
+      blocks.push(<h4 key={`section-${blocks.length}`}>{trimmedLine.slice(0, -1)}</h4>);
+    } else {
+      blocks.push(<p key={`paragraph-${blocks.length}`}>{trimmedLine}</p>);
+    }
+  });
+  flushList();
+
+  return <div className="formatted-message">{blocks}</div>;
+};
+
 const App = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -182,7 +232,7 @@ const App = () => {
             className={`message ${msg.role}`}
             style={{ animation: 'fadeInUp 0.5s ease forwards', animationDelay: `${idx * 0.1}s` }}
           >
-            {msg.content}
+            {msg.role === 'bot' ? renderBotMessage(msg.content) : msg.content}
           </div>
         ))}
 

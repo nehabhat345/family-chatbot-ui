@@ -1,8 +1,21 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders recipe response titles and instructions as structured content', async () => {
+  global.fetch = jest.fn().mockResolvedValue({
+    json: async () => ({
+      response: '**Pumpkin Recipe**\n\nIngredients:\n- Pumpkin\n\nMethod:\n1. Cook until tender.',
+    }),
+  });
+  Element.prototype.scrollIntoView = jest.fn();
+
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText('Type your message'), { target: { value: 'pumpkin' } });
+  fireEvent.click(screen.getByLabelText('Send message'));
+
+  expect(await screen.findByRole('heading', { name: 'Pumpkin Recipe' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Ingredients' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Method' })).toBeInTheDocument();
+  expect(screen.getByText('Pumpkin')).toBeInTheDocument();
+  expect(screen.getByText('Cook until tender.')).toBeInTheDocument();
 });
