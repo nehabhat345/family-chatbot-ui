@@ -1,3 +1,4 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import App from './App';
 
@@ -7,9 +8,9 @@ test('renders recipe response titles and instructions as structured content', as
       response: '**Pumpkin Recipe**\n\nIngredients:\n- Pumpkin\n\nMethod:\n1. Cook until tender.',
     }),
   });
-  Element.prototype.scrollIntoView = jest.fn();
+  Element.prototype.scrollIntoView = jest.fn(() => Promise.resolve());
 
-  render(<App />);
+  render(<React.StrictMode><App /></React.StrictMode>);
   expect(screen.getByText(/Namaste! I'm Nehu/)).toBeInTheDocument();
   fireEvent.change(screen.getByLabelText('Type your message'), { target: { value: 'pumpkin' } });
   fireEvent.click(screen.getByLabelText('Send message'));

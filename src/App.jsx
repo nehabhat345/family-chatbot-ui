@@ -156,8 +156,12 @@ const App = () => {
   const [loadingMessage, setLoadingMessage] = useState(defaultLoadingMsg);
   const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  useEffect(scrollToBottom, [messages, loading]);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, loading]);
 
   const sendMessage = async (customMessage = null) => {
     let messageToSend = (customMessage || input).trim().toLowerCase();
