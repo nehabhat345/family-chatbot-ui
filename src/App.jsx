@@ -100,13 +100,19 @@ const renderBotMessage = (content) => {
   if (typeof content !== 'string') return content ?? '';
 
   const blocks = [];
+  let currentSection = null;
   let listType = null;
   let listItems = [];
+  let blockKey = 0;
+  const pushBlock = (block) => {
+    if (currentSection) currentSection.blocks.push(block);
+    else blocks.push(block);
+  };
   const flushList = () => {
     if (!listItems.length) return;
     const List = listType === 'numbered' ? 'ol' : 'ul';
-    blocks.push(
-      <List key={`list-${blocks.length}`}>
+    pushBlock(
+      <List key={`list-${blockKey++}`}>
         {listItems.map((item, index) => <li key={index}>{item}</li>)}
       </List>
     );
@@ -133,16 +139,31 @@ const renderBotMessage = (content) => {
     flushList();
     const titleMatch = trimmedLine.match(/^\*\*(.+)\*\*$/);
     if (titleMatch) {
-      blocks.push(<h3 key={`title-${blocks.length}`}>{titleMatch[1]}</h3>);
+      pushBlock(<h3 key={`title-${blockKey++}`}>{titleMatch[1]}</h3>);
     } else if (/^(Ingredients|Method|Details|Tip):$/i.test(trimmedLine)) {
-      blocks.push(<h4 key={`section-${blocks.length}`}>{trimmedLine.slice(0, -1)}</h4>);
+      currentSection = {
+        kind: 'section',
+        key: `section-${blockKey++}`,
+        title: trimmedLine.slice(0, -1),
+        blocks: [],
+      };
+      blocks.push(currentSection);
     } else {
-      blocks.push(<p key={`paragraph-${blocks.length}`}>{trimmedLine}</p>);
+      pushBlock(<p key={`paragraph-${blockKey++}`}>{trimmedLine}</p>);
     }
   });
   flushList();
 
-  return <div className="formatted-message">{blocks}</div>;
+  return (
+    <div className="formatted-message">
+      {blocks.map((block) => block.kind === 'section' ? (
+        <details key={block.key} className="recipe-section">
+          <summary>{block.title}</summary>
+          <div className="recipe-section-content">{block.blocks}</div>
+        </details>
+      ) : block)}
+    </div>
+  );
 };
 
 const App = () => {

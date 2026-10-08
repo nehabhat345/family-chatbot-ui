@@ -16,8 +16,13 @@ test('renders recipe response titles and instructions as structured content', as
   fireEvent.click(screen.getByLabelText('Send message'));
 
   expect(await screen.findByRole('heading', { name: 'Pumpkin Recipe' })).toBeInTheDocument();
-  expect(screen.getByRole('heading', { name: 'Ingredients' })).toBeInTheDocument();
-  expect(screen.getByRole('heading', { name: 'Method' })).toBeInTheDocument();
+  const ingredientsSummary = screen.getByText('Ingredients');
+  const ingredientsDisclosure = ingredientsSummary.closest('details');
+  expect(ingredientsDisclosure).not.toHaveAttribute('open');
+  fireEvent.click(ingredientsSummary);
+  expect(ingredientsDisclosure).toHaveAttribute('open');
+  const methodSummary = screen.getByText('Method');
+  expect(methodSummary.closest('details')).not.toHaveAttribute('open');
   expect(screen.getByText('Pumpkin')).toBeInTheDocument();
   expect(screen.getByText('Cook until tender.')).toBeInTheDocument();
 });
