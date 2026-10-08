@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "./static/css/main.bfcb4791.css",
-    "main.js": "./static/js/main.e3cf61d5.js",
+    "main.css": "./static/css/main.c9a943ce.css",
+    "main.js": "./static/js/main.d8d79385.js",
     "static/media/gharkiBaat.png": "./static/media/gharkiBaat.d574ad0742c90551a64a.png",
     "index.html": "./index.html",
-    "main.bfcb4791.css.map": "./static/css/main.bfcb4791.css.map",
-    "main.e3cf61d5.js.map": "./static/js/main.e3cf61d5.js.map"
+    "main.c9a943ce.css.map": "./static/css/main.c9a943ce.css.map",
+    "main.d8d79385.js.map": "./static/js/main.d8d79385.js.map"
   },
   "entrypoints": [
-    "static/css/main.bfcb4791.css",
-    "static/js/main.e3cf61d5.js"
+    "static/css/main.c9a943ce.css",
+    "static/js/main.d8d79385.js"
   ]
 }
