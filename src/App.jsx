@@ -146,7 +146,9 @@ const renderBotMessage = (content) => {
 };
 
 const App = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    { role: 'bot', content: "Namaste! I'm Nehu. Ask me about a family recipe or pooja ritual." },
+  ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [lastSuggestedKeyword, setLastSuggestedKeyword] = useState(null);

@@ -10,6 +10,7 @@ test('renders recipe response titles and instructions as structured content', as
   Element.prototype.scrollIntoView = jest.fn();
 
   render(<App />);
+  expect(screen.getByText(/Namaste! I'm Nehu/)).toBeInTheDocument();
   fireEvent.change(screen.getByLabelText('Type your message'), { target: { value: 'pumpkin' } });
   fireEvent.click(screen.getByLabelText('Send message'));
 
