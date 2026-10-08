@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import './FormattedMessage.css';
+import './ChatPrompts.css';
 
 const aliases = {
   "karwa chauth": "karwa_chauth",
@@ -69,6 +70,32 @@ const kashmiriRecipeKeys = [
 ];
 
 const defaultLoadingMsg = "Bringing mummy's best ideas for you... आपके लिए मम्मी के बेहतरीन विचार ला रहे हैं।";
+const starterPrompts = [
+  'Pumpkin recipe',
+  'Kashmiri haak',
+  'Karwa Chauth pooja',
+];
+const followUpPrompts = ['Teej pooja', 'Urad dal poori', 'Kashmiri haak'];
+const surprisePrompts = [
+  'Pumpkin recipe',
+  'Karela recipe',
+  'Urad dal poori',
+  'Aloo jeera',
+  'Lauki sabzi',
+  'Nimbu rice',
+  'Kashmiri haak',
+  'Chokh Wangun',
+  'Nadru Yakhni',
+  'Palak paneer',
+  'Fried rice',
+  'Avocado toast',
+  'Masala chai',
+  'Karwa Chauth pooja',
+  'Teej pooja',
+  'Govardhan pooja',
+  'Navratri vrat',
+  'Sakat Chauth pooja',
+];
 
 const getFamilyMessages = (key) => {
   if (vaishPoojaKeys.includes(key)) {
@@ -176,6 +203,8 @@ const App = () => {
   const [familyRecipeMessage, setFamilyRecipeMessage] = useState('');
   const [loadingMessage, setLoadingMessage] = useState(defaultLoadingMsg);
   const messagesEndRef = useRef(null);
+  const recentSurprisePrompts = useRef([]);
+  const hasUserMessages = messages.some(message => message.role === 'user');
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -183,6 +212,20 @@ const App = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, loading]);
+
+  const getSurprisePrompt = () => {
+    let availablePrompts = surprisePrompts.filter(
+      prompt => !recentSurprisePrompts.current.includes(prompt)
+    );
+    if (!availablePrompts.length) {
+      recentSurprisePrompts.current = [];
+      availablePrompts = surprisePrompts;
+    }
+
+    const prompt = availablePrompts[Math.floor(Math.random() * availablePrompts.length)];
+    recentSurprisePrompts.current = [...recentSurprisePrompts.current, prompt].slice(-5);
+    return prompt;
+  };
 
   const sendMessage = async (customMessage = null) => {
     let messageToSend = (customMessage || input).trim().toLowerCase();
@@ -277,6 +320,33 @@ const App = () => {
           <div className="message bot loading">
             <span className="spinner" aria-label="Loading"></span>
             {loadingMessage}
+          </div>
+        )}
+
+        {!loading && (
+          <div className="chat-prompts" aria-label="Suggested messages">
+            <p className="chat-prompts-title">
+              {hasUserMessages ? 'Keep the chat going' : 'Pick something to explore'}
+            </p>
+            <div className="chat-prompt-list">
+              {(hasUserMessages ? followUpPrompts : starterPrompts).map(prompt => (
+                <button
+                  key={prompt}
+                  className="chat-prompt"
+                  type="button"
+                  onClick={() => sendMessage(prompt)}
+                >
+                  {prompt}
+                </button>
+              ))}
+              <button
+                className="chat-prompt surprise-prompt"
+                type="button"
+                onClick={() => sendMessage(getSurprisePrompt())}
+              >
+                ✨ Surprise me
+              </button>
+            </div>
           </div>
         )}
 
